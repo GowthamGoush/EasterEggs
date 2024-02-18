@@ -1,6 +1,8 @@
 export const getRandomPositionArray = ({
   gameWidth,
   gameHeight,
+  verticalMargin = 0,
+  horizontalMargin = 0,
   size,
   count,
   distanceBuffer = 0,
@@ -19,16 +21,22 @@ export const getRandomPositionArray = ({
 
       const distance = Math.hypot(dy, dx);
 
-      if (distance < size * 2 + distanceBuffer) {
+      if (distance < Math.max(size * 2, distanceBuffer)) {
         hasOverlap = true;
         break;
       }
     }
 
-    if (!hasOverlap) {
+    if (
+      !hasOverlap &&
+      posX > horizontalMargin + size * 2 &&
+      posY > verticalMargin + size * 2 &&
+      posX < gameWidth - size &&
+      posY < gameHeight
+    ) {
       positions.push({
-        posX,
-        posY,
+        posX: posX,
+        posY: posY,
       });
       count--;
     }

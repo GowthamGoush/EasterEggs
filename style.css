@@ -21,3 +21,7 @@
 
   pointer-events: none;
 }
+
+#obstacles {
+  display: none;
+}

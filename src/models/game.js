@@ -9,7 +9,7 @@ export class Game {
     this.height = this.canvas.height;
     this.obstaclesCount = 5;
     this.obstacleRadius = 60;
-    this.obstacleMinSpacing = 100;
+    this.obstacleMinSpacing = 200;
     this.obstacles = [];
     this.mouse = {
       posX: this.width * 0.5,
@@ -17,6 +17,7 @@ export class Game {
       pressed: false,
     };
     this.player = new Player(this);
+    this.image = document.getElementById("obstacles");
 
     canvas.addEventListener("mousedown", (e) => {
       this.mouse.posX = e.offsetX;
@@ -46,6 +47,7 @@ export class Game {
     const obstaclesPositions = getRandomPositionArray({
       gameWidth: this.width,
       gameHeight: this.height,
+      verticalMargin: 260,
       size: this.obstacleRadius,
       count: this.obstaclesCount,
       distanceBuffer: this.obstacleMinSpacing,
