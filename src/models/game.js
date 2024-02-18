@@ -1,10 +1,16 @@
 import { Player } from "./player";
+import Obstacle from "./obstacle";
+import { getRandomPositionArray } from "../utils";
 
 export class Game {
   constructor(canvas) {
     this.canvas = canvas;
     this.width = this.canvas.width;
     this.height = this.canvas.height;
+    this.obstaclesCount = 5;
+    this.obstacleRadius = 60;
+    this.obstacleMinSpacing = 100;
+    this.obstacles = [];
     this.mouse = {
       posX: this.width * 0.5,
       posY: this.height * 0.5,
@@ -33,5 +39,20 @@ export class Game {
   render(context) {
     this.player.draw(context);
     this.player.update();
+    this.obstacles.forEach((obstacle) => obstacle.draw(context));
+  }
+
+  init() {
+    const obstaclesPositions = getRandomPositionArray({
+      gameWidth: this.width,
+      gameHeight: this.height,
+      size: this.obstacleRadius,
+      count: this.obstaclesCount,
+      distanceBuffer: this.obstacleMinSpacing,
+    });
+
+    obstaclesPositions.forEach((position) => {
+      this.obstacles.push(new Obstacle(this, position));
+    });
   }
 }
