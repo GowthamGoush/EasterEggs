@@ -8,7 +8,7 @@ export class Game {
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.obstaclesCount = 5;
-    this.obstacleRadius = 60;
+    this.collisionRadius = 60;
     this.obstacleMinSpacing = 200;
     this.obstacles = [];
     this.mouse = {
@@ -37,18 +37,12 @@ export class Game {
     });
   }
 
-  render(context) {
-    this.player.draw(context);
-    this.player.update();
-    this.obstacles.forEach((obstacle) => obstacle.draw(context));
-  }
-
   init() {
     const obstaclesPositions = getRandomPositionArray({
       gameWidth: this.width,
       gameHeight: this.height,
       verticalMargin: 260,
-      size: this.obstacleRadius,
+      size: this.collisionRadius,
       count: this.obstaclesCount,
       distanceBuffer: this.obstacleMinSpacing,
     });
@@ -56,5 +50,21 @@ export class Game {
     obstaclesPositions.forEach((position) => {
       this.obstacles.push(new Obstacle(this, position));
     });
+  }
+
+  checkCollision(objectA, objectB) {
+    const dx = objectA.collisionX - objectB.collisionX;
+    const dy = objectA.collisionY - objectB.collisionY;
+
+    const distance = Math.hypot(dy, dx);
+    const sumOfRadii = objectA.collisionRadius + objectB.collisionRadius;
+
+    return { collision: distance < sumOfRadii, distance, sumOfRadii, dx, dy };
+  }
+
+  render(context) {
+    this.obstacles.forEach((obstacle) => obstacle.draw(context));
+    this.player.update();
+    this.player.draw(context);
   }
 }

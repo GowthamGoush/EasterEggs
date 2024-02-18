@@ -16,8 +16,8 @@ export const getRandomPositionArray = ({
     for (let posIndex = 0; posIndex < positions.length; posIndex++) {
       const prevObstacle = positions[posIndex];
 
-      const dx = Math.abs(prevObstacle.posX - posX);
-      const dy = Math.abs(prevObstacle.posY - posY);
+      const dx = prevObstacle.posX - posX;
+      const dy = prevObstacle.posY - posY;
 
       const distance = Math.hypot(dy, dx);
 

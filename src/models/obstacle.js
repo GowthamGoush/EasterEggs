@@ -12,7 +12,7 @@ class Obstacle {
     this.spriteY = this.collisionY - this.width * 0.5 - 80;
     this.frameX = Math.floor(Math.random() * 4);
     this.frameY = Math.floor(Math.random() * 3);
-    this.collisionRadius = this.game.obstacleRadius;
+    this.collisionRadius = this.game.collisionRadius;
   }
 
   draw(context) {

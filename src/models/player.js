@@ -13,7 +13,13 @@ export class Player {
 
   draw(context) {
     context.beginPath();
-    context.arc(this.collisionX, this.collisionY, 15, 0, Math.PI * 2);
+    context.arc(
+      this.collisionX,
+      this.collisionY,
+      this.collisionRadius,
+      0,
+      Math.PI * 2
+    );
     context.save();
 
     context.globalAlpha = 0.5;
@@ -32,8 +38,6 @@ export class Player {
 
     const distance = Math.hypot(this.dx, this.dy);
 
-    console.log(distance, this.speedModifier);
-
     if (distance > this.speedModifier) {
       this.speedX = this.dx / distance || 0;
       this.speedY = this.dy / distance || 0;
@@ -44,5 +48,18 @@ export class Player {
 
     this.collisionX += this.speedX * this.speedModifier;
     this.collisionY += this.speedY * this.speedModifier;
+
+    this.game.obstacles.forEach((obstacle) => {
+      const { collision, distance, sumOfRadii, dx, dy } =
+        this.game.checkCollision(this, obstacle);
+
+      if (collision) {
+        const unitX = dx / distance;
+        const unitY = dy / distance;
+
+        this.collisionX = obstacle.collisionX + (sumOfRadii + 1) * unitX;
+        this.collisionY = obstacle.collisionY + (sumOfRadii + 1) * unitY;
+      }
+    });
   }
 }
