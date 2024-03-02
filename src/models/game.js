@@ -7,6 +7,7 @@ export class Game {
     this.canvas = canvas;
     this.width = this.canvas.width;
     this.height = this.canvas.height;
+    this.debug = false;
     this.obstaclesCount = 5;
     this.collisionRadius = 60;
     this.obstacleMinSpacing = 200;
@@ -33,6 +34,9 @@ export class Game {
       this.mouse.posX = e.offsetX;
       this.mouse.posY = e.offsetY;
       this.mouse.pressed = false;
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "d") this.debug = !this.debug;
     });
   }
 

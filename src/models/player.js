@@ -35,24 +35,26 @@ export class Player {
       this.height
     );
 
-    context.beginPath();
-    context.arc(
-      this.collisionX,
-      this.collisionY,
-      this.collisionRadius,
-      0,
-      Math.PI * 2
-    );
-    context.save();
+    if (this.game.debug) {
+      context.beginPath();
+      context.arc(
+        this.collisionX,
+        this.collisionY,
+        this.collisionRadius,
+        0,
+        Math.PI * 2
+      );
+      context.save();
 
-    context.globalAlpha = 0.5;
+      context.globalAlpha = 0.5;
 
-    context.fill();
+      context.fill();
 
-    context.restore();
-    context.moveTo(this.game.mouse.posX, this.game.mouse.posY);
-    context.lineTo(this.collisionX, this.collisionY);
-    context.stroke();
+      context.restore();
+      context.moveTo(this.game.mouse.posX, this.game.mouse.posY);
+      context.lineTo(this.collisionX, this.collisionY);
+      context.stroke();
+    }
   }
 
   update() {
