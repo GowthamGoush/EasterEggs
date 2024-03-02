@@ -76,6 +76,24 @@ export class Player {
     this.collisionX += this.speedX * this.speedModifier;
     this.collisionY += this.speedY * this.speedModifier;
 
+    /**
+     * Horizontal boundary
+     */
+    if (this.collisionX < this.collisionRadius) {
+      this.collisionX = this.collisionRadius;
+    } else if (this.collisionX > this.game.width - this.collisionRadius) {
+      this.collisionX = this.game.width - this.collisionRadius;
+    }
+
+    /**
+     * Vertical boundary
+     */
+    if (this.collisionY < this.game.topMargin + this.collisionRadius) {
+      this.collisionY = this.game.topMargin + this.collisionRadius;
+    } else if (this.collisionY > this.game.height - this.collisionRadius) {
+      this.collisionY = this.game.height - this.collisionRadius;
+    }
+
     this.spriteX = this.collisionX - this.width * 0.5;
     this.spriteY = this.collisionY - this.height * 0.5 - 100;
 

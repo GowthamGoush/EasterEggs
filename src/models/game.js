@@ -8,6 +8,7 @@ export class Game {
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.debug = false;
+    this.topMargin = 260;
     this.obstaclesCount = 5;
     this.collisionRadius = 60;
     this.obstacleMinSpacing = 200;
@@ -44,7 +45,7 @@ export class Game {
     const obstaclesPositions = getRandomPositionArray({
       gameWidth: this.width,
       gameHeight: this.height,
-      verticalMargin: 260,
+      verticalMargin: this.topMargin,
       size: this.collisionRadius,
       count: this.obstaclesCount,
       distanceBuffer: this.obstacleMinSpacing,
