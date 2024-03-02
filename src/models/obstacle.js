@@ -1,7 +1,7 @@
 class Obstacle {
   constructor(game, position) {
     this.game = game;
-    this.image = game.image;
+    this.image = document.getElementById("obstacles");
     this.collisionX = position.posX;
     this.collisionY = position.posY;
     this.obstacleWidth = 250;
@@ -16,6 +16,7 @@ class Obstacle {
   }
 
   draw(context) {
+    console.log("===", context);
     context.drawImage(
       this.image,
       this.frameX * this.obstacleWidth,

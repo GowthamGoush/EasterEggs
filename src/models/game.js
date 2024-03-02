@@ -1,6 +1,6 @@
 import { Player } from "./player";
 import Obstacle from "./obstacle";
-import { getRandomPositionArray } from "../utils";
+import { getRandomPositionArray } from "../utils/game_utils";
 
 export class Game {
   constructor(canvas) {
@@ -17,7 +17,6 @@ export class Game {
       pressed: false,
     };
     this.player = new Player(this);
-    this.image = document.getElementById("obstacles");
 
     canvas.addEventListener("mousedown", (e) => {
       this.mouse.posX = e.offsetX;
