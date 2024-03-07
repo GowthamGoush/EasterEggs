@@ -47,6 +47,8 @@ class Obstacle {
       context.stroke();
     }
   }
+
+  update() {}
 }
 
 export default Obstacle;

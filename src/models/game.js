@@ -9,7 +9,7 @@ export class Game {
     this.canvas = canvas;
     this.width = this.canvas.width;
     this.height = this.canvas.height;
-    this.debug = true;
+    this.debug = false;
     this.topMargin = 260;
     this.obstaclesCount = 5;
     this.collisionRadius = 60;
@@ -77,12 +77,18 @@ export class Game {
   }
 
   render(context, deltaTime) {
-    this.obstacles.forEach((obstacle) => obstacle.draw(context));
-    this.player.update();
-    this.player.draw(context);
-    this.eggs.forEach((egg) => {
-      egg.draw(context);
-      egg.update();
+    const gameObjects = [...this.obstacles, ...this.eggs, this.player];
+
+    /**
+     * Orders the rendering of objects based on Y-axis to provide pseudo 3D effect
+     */
+    gameObjects.sort(
+      (objectA, objectB) => objectA.collisionY - objectB.collisionY
+    );
+
+    gameObjects.forEach((object) => {
+      object.draw(context);
+      object.update();
     });
 
     if (
