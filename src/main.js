@@ -13,11 +13,15 @@ window.addEventListener("load", function () {
   const game = new Game(canvas);
   game.init();
 
-  function animate() {
+  let lastTimeStamp = 0;
+  function animate(timestamp) {
+    const deltaTime = timestamp - lastTimeStamp;
+    lastTimeStamp = timestamp;
+
     context.clearRect(0, 0, canvas.width, canvas.height);
-    game.render(context);
+    game.render(context, deltaTime);
     window.requestAnimationFrame(animate);
   }
 
-  animate();
+  animate(0);
 });

@@ -13,7 +13,7 @@ export class Player {
     this.speedY = 0;
     this.speedModifier = 15;
     this.playerWidth = 255;
-    this.playerheight = 255;
+    this.playerheight = 256;
     this.width = this.playerWidth;
     this.height = this.playerheight;
     this.spriteX;

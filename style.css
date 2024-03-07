@@ -22,10 +22,8 @@
   pointer-events: none;
 }
 
-#obstacles {
-  display: none;
-}
-
-#bull {
+#obstacles,
+#bull,
+#egg {
   display: none;
 }

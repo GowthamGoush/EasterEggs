@@ -1,5 +1,7 @@
 import { Player } from "./player";
 import Obstacle from "./obstacle";
+import Egg from "./egg";
+
 import { getRandomPositionArray } from "../utils/game_utils";
 
 export class Game {
@@ -7,12 +9,16 @@ export class Game {
     this.canvas = canvas;
     this.width = this.canvas.width;
     this.height = this.canvas.height;
-    this.debug = false;
+    this.debug = true;
     this.topMargin = 260;
     this.obstaclesCount = 5;
     this.collisionRadius = 60;
     this.obstacleMinSpacing = 200;
     this.obstacles = [];
+    this.eggs = [];
+    this.eggTimer = 0;
+    this.eggInterval = 1000;
+    this.eggCountMax = 10;
     this.mouse = {
       posX: this.width * 0.5,
       posY: this.height * 0.5,
@@ -56,6 +62,10 @@ export class Game {
     });
   }
 
+  addEgg() {
+    this.eggs.push(new Egg(this));
+  }
+
   checkCollision(objectA, objectB) {
     const dx = objectA.collisionX - objectB.collisionX;
     const dy = objectA.collisionY - objectB.collisionY;
@@ -66,9 +76,23 @@ export class Game {
     return { collision: distance < sumOfRadii, distance, sumOfRadii, dx, dy };
   }
 
-  render(context) {
+  render(context, deltaTime) {
     this.obstacles.forEach((obstacle) => obstacle.draw(context));
     this.player.update();
     this.player.draw(context);
+    this.eggs.forEach((egg) => {
+      egg.draw(context);
+      egg.update();
+    });
+
+    if (
+      this.eggTimer > this.eggInterval &&
+      this.eggs.length < this.eggCountMax
+    ) {
+      this.addEgg();
+      this.eggTimer = 0;
+    } else {
+      this.eggTimer += deltaTime;
+    }
   }
 }
