@@ -1,20 +1,21 @@
-class Egg {
+class Toad {
   constructor(game) {
     this.game = game;
-    this.image = document.getElementById("egg");
-    this.collisionRadius = 40;
+    this.image = document.getElementById("toad");
+    this.collisionRadius = 30;
+    this.speedX = Math.random() * 3 + 0.5;
     this.margin = this.collisionRadius * 2;
+    this.spriteWidth = 140;
+    this.spriteHeight = 260;
+    this.width = this.spriteWidth;
+    this.height = this.spriteHeight;
     this.collisionX =
-      this.margin + Math.random() * (this.game.width - this.margin * 2);
+      this.game.width + this.width + Math.random() * this.game.width * 0.5;
     this.collisionY =
       this.game.topMargin +
       Math.random() * (this.game.height - this.game.topMargin - this.margin);
-    this.spriteWidth = 110;
-    this.spriteHeight = 135;
-    this.width = this.spriteWidth;
-    this.height = this.spriteHeight;
-    this.spriteX;
-    this.spriteY;
+    this.spriteX = this.collisionX - this.width * 0.5;
+    this.spriteY = this.collisionY - this.height * 0.5 - 30;
   }
 
   draw(context) {
@@ -42,21 +43,24 @@ class Egg {
 
   update() {
     this.spriteX = this.collisionX - this.width * 0.5;
-    this.spriteY = this.collisionY - this.height * 0.5 - 30;
+    this.spriteY = this.collisionY - this.height * 0.5 - 60;
+    this.collisionX -= this.speedX;
 
-    const collisionObjects = [
-      ...this.game.obstacles,
-      ...this.game.toads,
-      this.game.player,
-    ];
+    if (this.spriteX + this.width < 0) {
+      this.collisionX =
+        this.game.width + this.width + Math.random() * this.game.width * 0.5;
+      this.collisionY =
+        this.game.topMargin +
+        Math.random() * (this.game.height - this.game.topMargin - this.margin);
+    }
+
+    const collisionObjects = [...this.game.obstacles, this.game.player];
     collisionObjects.forEach((obstacle) => {
       const { collision, distance, sumOfRadii, dx, dy } =
         this.game.checkCollision(this, obstacle);
-
       if (collision) {
         const unitX = dx / distance;
         const unitY = dy / distance;
-
         this.collisionX = obstacle.collisionX + (sumOfRadii + 1) * unitX;
         this.collisionY = obstacle.collisionY + (sumOfRadii + 1) * unitY;
       }
@@ -64,4 +68,4 @@ class Egg {
   }
 }
 
-export default Egg;
+export default Toad;

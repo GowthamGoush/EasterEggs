@@ -1,6 +1,7 @@
 import { Player } from "./player";
 import Obstacle from "./obstacle";
 import Egg from "./egg";
+import Toad from "./toad";
 
 import { getRandomPositionArray } from "../utils/game_utils";
 
@@ -19,6 +20,8 @@ export class Game {
     this.eggTimer = 0;
     this.eggInterval = 1000;
     this.eggCountMax = 10;
+    this.toads = [];
+    this.toadCountMax = 5;
     this.mouse = {
       posX: this.width * 0.5,
       posY: this.height * 0.5,
@@ -60,10 +63,18 @@ export class Game {
     obstaclesPositions.forEach((position) => {
       this.obstacles.push(new Obstacle(this, position));
     });
+
+    this.addToads();
   }
 
   addEgg() {
     this.eggs.push(new Egg(this));
+  }
+
+  addToads() {
+    for (let count = 0; count < this.toadCountMax; count++) {
+      this.toads.push(new Toad(this));
+    }
   }
 
   checkCollision(objectA, objectB) {
@@ -77,7 +88,13 @@ export class Game {
   }
 
   render(context, deltaTime) {
-    const gameObjects = [...this.obstacles, ...this.eggs, this.player];
+    console.log("==", this.toads);
+    const gameObjects = [
+      ...this.obstacles,
+      ...this.eggs,
+      ...this.toads,
+      this.player,
+    ];
 
     /**
      * Orders the rendering of objects based on Y-axis to provide pseudo 3D effect

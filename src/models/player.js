@@ -6,12 +6,12 @@ export class Player {
     this.image = document.getElementById("bull");
     this.collisionX = game.mouse.posX;
     this.collisionY = game.mouse.posY;
-    this.collisionRadius = 20;
+    this.collisionRadius = 30;
     this.dx = 0;
     this.dy = 0;
     this.speedX = 0;
     this.speedY = 0;
-    this.speedModifier = 15;
+    this.speedModifier = 10;
     this.playerWidth = 255;
     this.playerheight = 256;
     this.width = this.playerWidth;
@@ -95,7 +95,7 @@ export class Player {
     }
 
     this.spriteX = this.collisionX - this.width * 0.5;
-    this.spriteY = this.collisionY - this.height * 0.5 - 100;
+    this.spriteY = this.collisionY - this.height * 0.5 - 80;
 
     this.game.obstacles.forEach((obstacle) => {
       const { collision, distance, sumOfRadii, dx, dy } =
