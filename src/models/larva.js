@@ -60,15 +60,30 @@ class Larva {
       this.game.removeGameObjects();
     }
 
+    /**
+     *  Movement physics for Larva on collision with #Player & #Obstacles
+     */
     const collisionObjects = [...this.game.obstacles, this.game.player];
-    collisionObjects.forEach((obstacle) => {
+    collisionObjects.forEach((object) => {
       const { collision, distance, sumOfRadii, dx, dy } =
-        this.game.checkCollision(this, obstacle);
+        this.game.checkCollision(this, object);
       if (collision) {
         const unitX = dx / distance;
         const unitY = dy / distance;
-        this.collisionX = obstacle.collisionX + (sumOfRadii + 1) * unitX;
-        this.collisionY = obstacle.collisionY + (sumOfRadii + 1) * unitY;
+        this.collisionX = object.collisionX + (sumOfRadii + 1) * unitX;
+        this.collisionY = object.collisionY + (sumOfRadii + 1) * unitY;
+      }
+    });
+
+    /**
+     *  Movement physics for Larva on collision with #Toads
+     */
+    const collisionEnemies = [...this.game.toads];
+    collisionEnemies.forEach((object) => {
+      const { collision } = this.game.checkCollision(this, object);
+      if (collision) {
+        this.markedForDeletion = true;
+        this.game.removeGameObjects();
       }
     });
   }
