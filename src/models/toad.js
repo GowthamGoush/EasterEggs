@@ -16,10 +16,22 @@ class Toad {
       Math.random() * (this.game.height - this.game.topMargin - this.margin);
     this.spriteX = this.collisionX - this.width * 0.5;
     this.spriteY = this.collisionY - this.height * 0.5 - 30;
+    this.frameX = 0;
+    this.frameY = Math.floor(Math.random() * 4);
   }
 
   draw(context) {
-    context.drawImage(this.image, this.spriteX, this.spriteY);
+    context.drawImage(
+      this.image,
+      this.frameX * this.spriteWidth,
+      this.frameY * this.spriteHeight,
+      this.spriteWidth,
+      this.spriteHeight,
+      this.spriteX,
+      this.spriteY,
+      this.spriteWidth,
+      this.spriteHeight
+    );
 
     if (this.game.debug) {
       context.beginPath();
@@ -52,6 +64,7 @@ class Toad {
       this.collisionY =
         this.game.topMargin +
         Math.random() * (this.game.height - this.game.topMargin - this.margin);
+      this.frameY = Math.floor(Math.random() * 4);
     }
 
     const collisionObjects = [...this.game.obstacles, this.game.player];
