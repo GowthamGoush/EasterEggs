@@ -17,10 +17,11 @@ export class Game {
     this.obstacleMinSpacing = 200;
     this.obstacles = [];
     this.eggs = [];
+    this.toads = [];
+    this.hatchlings = [];
     this.eggTimer = 0;
     this.eggInterval = 1000;
     this.eggCountMax = 10;
-    this.toads = [];
     this.toadCountMax = 5;
     this.mouse = {
       posX: this.width * 0.5,
@@ -77,6 +78,13 @@ export class Game {
     }
   }
 
+  removeGameObjects() {
+    this.eggs = this.eggs.filter((egg) => !egg.markedForDeletion);
+    this.hatchlings = this.hatchlings.filter(
+      (hatchling) => !hatchling.markedForDeletion
+    );
+  }
+
   checkCollision(objectA, objectB) {
     const dx = objectA.collisionX - objectB.collisionX;
     const dy = objectA.collisionY - objectB.collisionY;
@@ -88,11 +96,11 @@ export class Game {
   }
 
   render(context, deltaTime) {
-    console.log("==", this.toads);
     const gameObjects = [
       ...this.obstacles,
       ...this.eggs,
       ...this.toads,
+      ...this.hatchlings,
       this.player,
     ];
 
@@ -105,7 +113,7 @@ export class Game {
 
     gameObjects.forEach((object) => {
       object.draw(context);
-      object.update();
+      object.update(deltaTime);
     });
 
     if (
