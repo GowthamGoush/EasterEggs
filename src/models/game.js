@@ -23,6 +23,8 @@ export class Game {
     this.eggInterval = 1000;
     this.eggCountMax = 10;
     this.toadCountMax = 5;
+    this.score = 0;
+    this.lostHatchlings = 0;
     this.mouse = {
       posX: this.width * 0.5,
       posY: this.height * 0.5,
@@ -105,7 +107,7 @@ export class Game {
     ];
 
     /**
-     * Orders the rendering of objects based on Y-axis to provide pseudo 3D effect
+     *  Orders the rendering of objects based on Y-axis to provide pseudo 3D effect
      */
     gameObjects.sort(
       (objectA, objectB) => objectA.collisionY - objectB.collisionY
@@ -125,5 +127,15 @@ export class Game {
     } else {
       this.eggTimer += deltaTime;
     }
+
+    context.save();
+    context.textAlign = "left";
+    context.fillText(`Score: ${this.score}`, 25, 50);
+
+    if (this.debug) {
+      context.fillText(`Lost: ${this.lostHatchlings}`, 25, 100);
+    }
+
+    context.restore();
   }
 }

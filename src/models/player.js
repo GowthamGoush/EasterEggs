@@ -11,7 +11,7 @@ export class Player {
     this.dy = 0;
     this.speedX = 0;
     this.speedY = 0;
-    this.speedModifier = 10;
+    this.speedModifier = 5;
     this.playerWidth = 255;
     this.playerheight = 256;
     this.width = this.playerWidth;

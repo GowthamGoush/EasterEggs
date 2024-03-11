@@ -55,13 +55,18 @@ class Larva {
     this.spriteY = this.collisionY - this.height * 0.5 - 40;
     this.collisionY -= this.speedY;
 
+    /**
+     *  Check and remove #Larva when moves to safety
+     */
     if (this.spriteY + (this.height - this.game.topMargin) < 0) {
       this.markedForDeletion = true;
       this.game.removeGameObjects();
+
+      this.game.score++;
     }
 
     /**
-     *  Movement physics for Larva on collision with #Player & #Obstacles
+     *  Movement physics for #Larva on collision with #Player & #Obstacles
      */
     const collisionObjects = [...this.game.obstacles, this.game.player];
     collisionObjects.forEach((object) => {
@@ -76,7 +81,7 @@ class Larva {
     });
 
     /**
-     *  Movement physics for Larva on collision with #Toads
+     *  Movement physics for #Larva on collision with #Toads
      */
     const collisionEnemies = [...this.game.toads];
     collisionEnemies.forEach((object) => {
@@ -84,6 +89,8 @@ class Larva {
       if (collision) {
         this.markedForDeletion = true;
         this.game.removeGameObjects();
+
+        this.game.lostHatchlings++;
       }
     });
   }
