@@ -7,6 +7,7 @@ import { drawText } from "../utils/common_utils";
 import {
   getGameOverContent,
   getRandomPositionArray,
+  isGameOver,
 } from "../utils/game_utils";
 
 export class Game {
@@ -29,7 +30,6 @@ export class Game {
     this.toadCountMax = 5;
     this.lostHatchlings = 0;
     this.score = 0;
-    this.winningScore = 30;
     this.over = false;
     this.mouse = {
       posX: this.width * 0.5,
@@ -145,7 +145,9 @@ export class Game {
 
     context.restore();
 
-    if (this.score >= this.winningScore || this.lostHatchlings > 10) {
+    if (
+      isGameOver({ score: this.score, lostHatchlings: this.lostHatchlings })
+    ) {
       this.over = true;
 
       context.save();
@@ -161,7 +163,6 @@ export class Game {
 
       const { title, description, restartText } = getGameOverContent({
         score: this.score,
-        winningScore: this.winningScore,
         lostHatchlings: this.lostHatchlings,
       });
 

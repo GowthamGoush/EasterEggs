@@ -4,7 +4,7 @@ class Egg {
   constructor(game) {
     this.game = game;
     this.image = document.getElementById("egg");
-    this.collisionRadius = 40;
+    this.collisionRadius = 30;
     this.margin = this.collisionRadius * 2;
     this.collisionX =
       this.margin + Math.random() * (this.game.width - this.margin * 2);
@@ -18,7 +18,7 @@ class Egg {
     this.spriteX;
     this.spriteY;
     this.hatchTimer = 0;
-    this.hatchInterval = 5000;
+    this.hatchInterval = 10000;
     this.markedForDeletion = false;
   }
 
@@ -59,6 +59,7 @@ class Egg {
     const collisionObjects = [
       ...this.game.obstacles,
       ...this.game.toads,
+      ...this.game.hatchlings,
       this.game.player,
     ];
 
@@ -75,7 +76,11 @@ class Egg {
       }
     });
 
-    if (this.hatchTimer > this.hatchInterval && !this.game.over) {
+    if (
+      (this.hatchTimer > this.hatchInterval ||
+        this.collisionY < this.game.topMargin) &&
+      !this.game.over
+    ) {
       this.game.hatchlings.push(
         new Larva(this.game, this.collisionX, this.collisionY)
       );

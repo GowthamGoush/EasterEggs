@@ -1,3 +1,5 @@
+import { LOSING_SCORE, WINNING_SCORE } from "../constants/game_constants";
+
 export const getRandomPositionArray = ({
   gameWidth,
   gameHeight,
@@ -45,14 +47,14 @@ export const getRandomPositionArray = ({
   return positions;
 };
 
-export const getGameOverContent = ({
-  score = 0,
-  winningScore = 0,
-  lostHatchlings,
-}) => {
+export const isGameOver = ({ score = 0, lostHatchlings = 0 }) => {
+  return score >= WINNING_SCORE || lostHatchlings >= LOSING_SCORE;
+};
+
+export const getGameOverContent = ({ score = 0, lostHatchlings }) => {
   const restartText = "Press 'R' to restart the game";
 
-  if (score >= winningScore) {
+  if (score >= WINNING_SCORE) {
     return {
       title: "AWESOME!!!",
       description: `You nailed it with ${score} points!`,
@@ -60,7 +62,7 @@ export const getGameOverContent = ({
     };
   }
 
-  if (score > Math.floor(winningScore * 0.9)) {
+  if (score >= Math.floor(WINNING_SCORE * 0.9)) {
     return {
       title: "SO CLOSE!!!",
       description: `Almost there with ${score} points!`,
