@@ -75,7 +75,7 @@ class Egg {
       }
     });
 
-    if (this.hatchTimer > this.hatchInterval) {
+    if (this.hatchTimer > this.hatchInterval && !this.game.over) {
       this.game.hatchlings.push(
         new Larva(this.game, this.collisionX, this.collisionY)
       );

@@ -58,7 +58,7 @@ class Toad {
     this.spriteY = this.collisionY - this.height * 0.5 - 60;
     this.collisionX -= this.speedX;
 
-    if (this.spriteX + this.width < 0) {
+    if (this.spriteX + this.width < 0 && !this.game.over) {
       this.collisionX =
         this.game.width + this.width + Math.random() * this.game.width * 0.5;
       this.collisionY =

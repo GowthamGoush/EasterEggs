@@ -44,3 +44,33 @@ export const getRandomPositionArray = ({
 
   return positions;
 };
+
+export const getGameOverContent = ({
+  score = 0,
+  winningScore = 0,
+  lostHatchlings,
+}) => {
+  const restartText = "Press 'R' to restart the game";
+
+  if (score >= winningScore) {
+    return {
+      title: "AWESOME!!!",
+      description: `You nailed it with ${score} points!`,
+      restartText,
+    };
+  }
+
+  if (score > Math.floor(winningScore * 0.9)) {
+    return {
+      title: "SO CLOSE!!!",
+      description: `Almost there with ${score} points!`,
+      restartText,
+    };
+  }
+
+  return {
+    title: "OOPS!!!",
+    description: `You lost ${lostHatchlings} hatchlings!`,
+    restartText,
+  };
+};

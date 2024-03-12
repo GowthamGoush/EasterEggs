@@ -62,7 +62,7 @@ class Larva {
       this.markedForDeletion = true;
       this.game.removeGameObjects();
 
-      this.game.score++;
+      if (!this.game.over) this.game.score++;
     }
 
     /**
