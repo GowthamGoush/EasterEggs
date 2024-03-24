@@ -5,7 +5,7 @@
 }
 
 #game-canvas {
-  background-image: url("./src/assets/background.png");
+  background-image: url("./assets/background.png");
 
   position: absolute;
   left: 50%;

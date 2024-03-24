@@ -1,14 +1,14 @@
 {
   "homepage": "https://gowthamgoush.github.io/EasterEggs/",
-  "name": "html-css",
-  "source": "./index.html",
+  "name": "EasterEggs",
+  "source": "./src/index.html",
   "version": "1.0.0",
-  "description": "",
+  "description": "Animated physics game with vanilla JavaScript",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel",
     "build": "parcel build",
-    "predeploy": "npm run build",
+    "predeploy": "rm -rf /dist && npm run build",
     "deploy": "gh-pages -d dist"
   },
   "keywords": [
@@ -16,7 +16,7 @@
     "HTML",
     "CSS"
   ],
-  "author": "",
+  "author": "gowthamgoush",
   "license": "ISC",
   "dependencies": {
     "react": "^18.2.0",
