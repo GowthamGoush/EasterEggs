@@ -7,10 +7,10 @@ class Egg {
     this.collisionRadius = 30;
     this.margin = this.collisionRadius * 2;
     this.collisionX =
-      this.margin + Math.random() * (this.game.width - this.margin * 2);
+      this.margin + Math.random() * (this.game.width() - this.margin * 2);
     this.collisionY =
       this.game.topMargin +
-      Math.random() * (this.game.height - this.game.topMargin - this.margin);
+      Math.random() * (this.game.height() - this.game.topMargin - this.margin);
     this.spriteWidth = 110;
     this.spriteHeight = 135;
     this.width = this.spriteWidth;

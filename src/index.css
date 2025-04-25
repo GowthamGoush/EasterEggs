@@ -6,20 +6,27 @@
 
 #game-canvas {
   background-image: url("./assets/background.png");
-
+  background-repeat: repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  display: block;
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  left: 0;
+  top: 0;
+  transform: none;
+  z-index: 1;
 }
 
 #overlay {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
   pointer-events: none;
+  z-index: 2;
 }
 
 #obstacles,

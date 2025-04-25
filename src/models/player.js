@@ -82,7 +82,7 @@ export class Player {
     if (this.collisionX < this.collisionRadius) {
       this.collisionX = this.collisionRadius;
     } else if (this.collisionX > this.game.width - this.collisionRadius) {
-      this.collisionX = this.game.width - this.collisionRadius;
+      this.collisionX = this.game.width() - this.collisionRadius;
     }
 
     /**
@@ -91,7 +91,7 @@ export class Player {
     if (this.collisionY < this.game.topMargin + this.collisionRadius) {
       this.collisionY = this.game.topMargin + this.collisionRadius;
     } else if (this.collisionY > this.game.height - this.collisionRadius) {
-      this.collisionY = this.game.height - this.collisionRadius;
+      this.collisionY = this.game.height() - this.collisionRadius;
     }
 
     this.spriteX = this.collisionX - this.width * 0.5;

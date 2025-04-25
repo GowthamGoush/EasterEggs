@@ -13,10 +13,10 @@ import {
 export class Game {
   constructor(canvas) {
     this.canvas = canvas;
-    this.width = this.canvas.width;
-    this.height = this.canvas.height;
+    this.width = () => this.canvas.width;
+    this.height = () => this.canvas.height; // Use as function for always-up-to-date values
     this.debug = false;
-    this.topMargin = 260;
+    this.topMargin = Math.floor(this.height() * 0.5); // Responsive top margin
     this.obstaclesCount = 5;
     this.collisionRadius = 60;
     this.obstacleMinSpacing = 200;
@@ -32,8 +32,8 @@ export class Game {
     this.score = 0;
     this.over = false;
     this.mouse = {
-      posX: this.width * 0.5,
-      posY: this.height * 0.5,
+      posX: this.width() * 0.5,
+      posY: this.height() * 0.5,
       pressed: false,
     };
     this.player = new Player(this);
@@ -56,13 +56,15 @@ export class Game {
     });
     window.addEventListener("keydown", (e) => {
       if (e.key === "d") this.debug = !this.debug;
+      if (e.key === "r" || e.key === "R") this.restart();
     });
   }
 
   init() {
+    this.topMargin = Math.floor(this.height() * 0.35);
     const obstaclesPositions = getRandomPositionArray({
-      gameWidth: this.width,
-      gameHeight: this.height,
+      gameWidth: this.width(),
+      gameHeight: this.height(),
       verticalMargin: this.topMargin,
       size: this.collisionRadius,
       count: this.obstaclesCount,
@@ -152,7 +154,7 @@ export class Game {
 
       context.save();
       context.fillStyle = "rgba(0,0,0,0.5)";
-      context.fillRect(0, 0, this.width, this.height);
+      context.fillRect(0, 0, this.width(), this.height());
 
       context.shadowColor = "black";
       context.shadowOffsetX = 4;
@@ -169,8 +171,8 @@ export class Game {
       drawText({
         context: context,
         content: title,
-        posX: this.width * 0.5,
-        posY: this.height * 0.4,
+        posX: this.width() * 0.5,
+        posY: this.height() * 0.4,
         align: "center",
         fontStyle: "130px Hevetica",
       });
@@ -178,8 +180,8 @@ export class Game {
       drawText({
         context: context,
         content: description,
-        posX: this.width * 0.5,
-        posY: this.height * 0.5,
+        posX: this.width() * 0.5,
+        posY: this.height() * 0.5,
         align: "center",
         fontStyle: "40px Hevetica",
       });
@@ -187,13 +189,38 @@ export class Game {
       drawText({
         context: context,
         content: restartText,
-        posX: this.width * 0.5,
-        posY: this.height * 0.95,
+        posX: this.width() * 0.5,
+        posY: this.height() * 0.95,
         align: "center",
         fontStyle: "30px Hevetica",
       });
 
       context.restore();
     }
+  }
+
+  /**
+   * Reset all game state variables to their initial values
+   */
+  restart() {
+    this.obstacles = [];
+    this.eggs = [];
+    this.toads = [];
+    this.hatchlings = [];
+    this.eggTimer = 0;
+    this.eggInterval = 1000;
+    this.eggCountMax = 10;
+    this.toadCountMax = 5;
+    this.lostHatchlings = 0;
+    this.score = 0;
+    this.over = false;
+    this.mouse = {
+      posX: this.width() * 0.5,
+      posY: this.height() * 0.5,
+      pressed: false,
+    };
+    this.player = new Player(this);
+    this.topMargin = Math.floor(this.height() * 0.5);
+    this.init();
   }
 }

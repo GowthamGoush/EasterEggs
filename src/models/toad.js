@@ -10,10 +10,10 @@ class Toad {
     this.width = this.spriteWidth;
     this.height = this.spriteHeight;
     this.collisionX =
-      this.game.width + this.width + Math.random() * this.game.width * 0.5;
+      this.game.width() + this.width + Math.random() * this.game.width() * 0.5;
     this.collisionY =
       this.game.topMargin +
-      Math.random() * (this.game.height - this.game.topMargin - this.margin);
+      Math.random() * (this.game.height() - this.game.topMargin - this.margin);
     this.spriteX = this.collisionX - this.width * 0.5;
     this.spriteY = this.collisionY - this.height * 0.5 - 30;
     this.frameX = 0;
