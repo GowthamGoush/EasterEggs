@@ -1,2 +1,0 @@
-*{box-sizing:border-box;margin:0;padding:0}#game-canvas{background-image:url(background.f7c632b5.png);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}#overlay{pointer-events:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}#obstacles,#bull,#egg,#toad,#larva{display:none}
-/*# sourceMappingURL=index.82589b99.css.map */
