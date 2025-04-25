@@ -2946,21 +2946,37 @@ window.addEventListener("load", function() {
     const context = canvas.getContext("2d");
     canvas.width = 1280;
     canvas.height = 720;
-    context.fillStyle = "white";
-    context.strokeStyle = "white";
-    context.font = "40px Helvetica";
-    context.textAlign = "center";
-    const game = new (0, _game.Game)(canvas);
-    game.init();
+    function resizeCanvasAndGame() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        if (game) {
+            game.topMargin = Math.max(200, Math.floor(canvas.height * 0.18)); // adjust margin responsively
+            if (typeof game.restart === "function") game.restart();
+        }
+        context.font = Math.floor(canvas.height * 0.04) + "px Helvetica";
+    }
+    let game;
     let lastTimeStamp = 0;
     function animate(timestamp) {
         const deltaTime = timestamp - lastTimeStamp;
         lastTimeStamp = timestamp;
         context.clearRect(0, 0, canvas.width, canvas.height);
-        game.render(context, deltaTime);
+        context.fillStyle = "white";
+        context.strokeStyle = "white";
+        context.font = "40px Helvetica";
+        context.textAlign = "center";
+        if (game) game.render(context, deltaTime);
         window.requestAnimationFrame(animate);
     }
-    animate(0);
+    function startGame() {
+        game = new (0, _game.Game)(canvas);
+        game.init();
+        resizeCanvasAndGame();
+        lastTimeStamp = 0;
+        animate(0);
+    }
+    window.addEventListener("resize", resizeCanvasAndGame);
+    startGame();
 });
 
 },{"./models/game":"51RTO"}],"51RTO":[function(require,module,exports) {
@@ -2979,10 +2995,10 @@ var _gameUtils = require("../utils/game_utils");
 class Game {
     constructor(canvas){
         this.canvas = canvas;
-        this.width = this.canvas.width;
-        this.height = this.canvas.height;
+        this.width = ()=>this.canvas.width;
+        this.height = ()=>this.canvas.height; // Use as function for always-up-to-date values
         this.debug = false;
-        this.topMargin = 260;
+        this.topMargin = Math.floor(this.height() * 0.5); // Responsive top margin
         this.obstaclesCount = 5;
         this.collisionRadius = 60;
         this.obstacleMinSpacing = 200;
@@ -2998,8 +3014,8 @@ class Game {
         this.score = 0;
         this.over = false;
         this.mouse = {
-            posX: this.width * 0.5,
-            posY: this.height * 0.5,
+            posX: this.width() * 0.5,
+            posY: this.height() * 0.5,
             pressed: false
         };
         this.player = new (0, _player.Player)(this);
@@ -3021,12 +3037,14 @@ class Game {
         });
         window.addEventListener("keydown", (e)=>{
             if (e.key === "d") this.debug = !this.debug;
+            if (e.key === "r" || e.key === "R") this.restart();
         });
     }
     init() {
+        this.topMargin = Math.floor(this.height() * 0.35);
         const obstaclesPositions = (0, _gameUtils.getRandomPositionArray)({
-            gameWidth: this.width,
-            gameHeight: this.height,
+            gameWidth: this.width(),
+            gameHeight: this.height(),
             verticalMargin: this.topMargin,
             size: this.collisionRadius,
             count: this.obstaclesCount,
@@ -3091,7 +3109,7 @@ class Game {
             this.over = true;
             context.save();
             context.fillStyle = "rgba(0,0,0,0.5)";
-            context.fillRect(0, 0, this.width, this.height);
+            context.fillRect(0, 0, this.width(), this.height());
             context.shadowColor = "black";
             context.shadowOffsetX = 4;
             context.shadowOffsetY = 4;
@@ -3104,29 +3122,52 @@ class Game {
             (0, _commonUtils.drawText)({
                 context: context,
                 content: title,
-                posX: this.width * 0.5,
-                posY: this.height * 0.4,
+                posX: this.width() * 0.5,
+                posY: this.height() * 0.4,
                 align: "center",
                 fontStyle: "130px Hevetica"
             });
             (0, _commonUtils.drawText)({
                 context: context,
                 content: description,
-                posX: this.width * 0.5,
-                posY: this.height * 0.5,
+                posX: this.width() * 0.5,
+                posY: this.height() * 0.5,
                 align: "center",
                 fontStyle: "40px Hevetica"
             });
             (0, _commonUtils.drawText)({
                 context: context,
                 content: restartText,
-                posX: this.width * 0.5,
-                posY: this.height * 0.95,
+                posX: this.width() * 0.5,
+                posY: this.height() * 0.95,
                 align: "center",
                 fontStyle: "30px Hevetica"
             });
             context.restore();
         }
+    }
+    /**
+   * Reset all game state variables to their initial values
+   */ restart() {
+        this.obstacles = [];
+        this.eggs = [];
+        this.toads = [];
+        this.hatchlings = [];
+        this.eggTimer = 0;
+        this.eggInterval = 1000;
+        this.eggCountMax = 10;
+        this.toadCountMax = 5;
+        this.lostHatchlings = 0;
+        this.score = 0;
+        this.over = false;
+        this.mouse = {
+            posX: this.width() * 0.5,
+            posY: this.height() * 0.5,
+            pressed: false
+        };
+        this.player = new (0, _player.Player)(this);
+        this.topMargin = Math.floor(this.height() * 0.5);
+        this.init();
     }
 }
 
@@ -3187,11 +3228,11 @@ class Player {
         /**
      * Horizontal boundary
      */ if (this.collisionX < this.collisionRadius) this.collisionX = this.collisionRadius;
-        else if (this.collisionX > this.game.width - this.collisionRadius) this.collisionX = this.game.width - this.collisionRadius;
+        else if (this.collisionX > this.game.width - this.collisionRadius) this.collisionX = this.game.width() - this.collisionRadius;
         /**
      * Vertical boundary
      */ if (this.collisionY < this.game.topMargin + this.collisionRadius) this.collisionY = this.game.topMargin + this.collisionRadius;
-        else if (this.collisionY > this.game.height - this.collisionRadius) this.collisionY = this.game.height - this.collisionRadius;
+        else if (this.collisionY > this.game.height - this.collisionRadius) this.collisionY = this.game.height() - this.collisionRadius;
         this.spriteX = this.collisionX - this.width * 0.5;
         this.spriteY = this.collisionY - this.height * 0.5 - 80;
         this.game.obstacles.forEach((obstacle)=>{
@@ -3298,8 +3339,8 @@ class Egg {
         this.image = document.getElementById("egg");
         this.collisionRadius = 30;
         this.margin = this.collisionRadius * 2;
-        this.collisionX = this.margin + Math.random() * (this.game.width - this.margin * 2);
-        this.collisionY = this.game.topMargin + Math.random() * (this.game.height - this.game.topMargin - this.margin);
+        this.collisionX = this.margin + Math.random() * (this.game.width() - this.margin * 2);
+        this.collisionY = this.game.topMargin + Math.random() * (this.game.height() - this.game.topMargin - this.margin);
         this.spriteWidth = 110;
         this.spriteHeight = 135;
         this.width = this.spriteWidth;
@@ -3441,8 +3482,8 @@ class Toad {
         this.spriteHeight = 260;
         this.width = this.spriteWidth;
         this.height = this.spriteHeight;
-        this.collisionX = this.game.width + this.width + Math.random() * this.game.width * 0.5;
-        this.collisionY = this.game.topMargin + Math.random() * (this.game.height - this.game.topMargin - this.margin);
+        this.collisionX = this.game.width() + this.width + Math.random() * this.game.width() * 0.5;
+        this.collisionY = this.game.topMargin + Math.random() * (this.game.height() - this.game.topMargin - this.margin);
         this.spriteX = this.collisionX - this.width * 0.5;
         this.spriteY = this.collisionY - this.height * 0.5 - 30;
         this.frameX = 0;
